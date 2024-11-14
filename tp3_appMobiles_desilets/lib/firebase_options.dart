@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'cem5n6-tp-desilets.firebaseapp.com',
     storageBucket: 'cem5n6-tp-desilets.firebasestorage.app',
   );
+
 }
