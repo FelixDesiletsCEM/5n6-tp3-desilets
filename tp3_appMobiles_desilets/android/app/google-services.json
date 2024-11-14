@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "289883860881",
+    "project_id": "cem5n6-tp-desilets",
+    "storage_bucket": "cem5n6-tp-desilets.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289883860881:android:267dd3ae9d108c52bd7430",
+        "android_client_info": {
+          "package_name": "com.example.tp3_appmobiles_desilets"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2xFnMJ-F9k4sGCthL-uKoE9UQQ_lBrbM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
