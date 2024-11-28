@@ -29,10 +29,14 @@ class _InscriptionPageState extends State<InscriptionPage> {
               "Mot de passe:",
             ),
             TextField(controller: textEditingController, decoration: InputDecoration(hintText: "Mot de passe"),),
-            //TODO Inscrire l'utilisateur avec le nom d'utilisateur et le mot de passe.
-            OutlinedButton(onPressed: (){}, child: Text("Inscription")),
-            //TODO Rediriger vers la page de connexion.
-            OutlinedButton(onPressed: (){}, child: Text("Connexion")),
+            OutlinedButton(onPressed: (){
+              //TODO Inscrire l'utilisateur avec le nom d'utilisateur et le mot de passe.
+
+            }, child: Text("Inscription")),
+
+            OutlinedButton(onPressed: (){
+              //TODO Rediriger vers la page de connexion.
+            }, child: Text("Connexion")),
           ],
         ),
       ),

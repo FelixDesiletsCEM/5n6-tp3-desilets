@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tp3_appmobiles_desilets/main.dart';
+
+import 'accueil_page.dart';
 
 class ConnexionPage extends StatefulWidget {
   const ConnexionPage({super.key});
@@ -30,12 +33,26 @@ class _ConnexionPageState extends State<ConnexionPage> {
               "Mot de passe:",
             ),
             TextField(controller: textEditingController, decoration: InputDecoration(hintText: "Mot de passe"),),
-            //TODO Connecter l'utilisateur avec le nom d'utilisateur et le mot de passe.
-            OutlinedButton(onPressed: (){}, child: Text("Connexion")),
-            //TODO Connecter l'utilisateur avec un compte Google.
-            OutlinedButton(onPressed: (){}, child: Text("Connexion avec Google")),
-            //TODO Rediriger vers la page d'inscription.
-            OutlinedButton(onPressed: (){}, child: Text("Inscription")),
+
+            OutlinedButton(onPressed: (){
+              //TODO Connecter l'utilisateur avec le nom d'utilisateur et le mot de passe.
+
+            }, child: Text("Connexion")),
+
+            OutlinedButton(onPressed: (){
+              //TODO Connecter l'utilisateur avec un compte Google.
+              print(signInWithGoogle().toString());
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => const AccueilPage(),
+              ),
+              );},
+                child: Text("Connexion avec Google")),
+
+            OutlinedButton(onPressed: (){
+              //TODO Rediriger vers la page d'inscription.
+            }, child: Text("Inscription")),
           ],
         ),
       ),
