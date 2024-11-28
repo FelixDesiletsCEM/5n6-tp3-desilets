@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../service.dart';
 
 class AccueilPage extends StatefulWidget {
@@ -31,6 +32,7 @@ class _AccueilPageState extends State<AccueilPage> {
   {
     var result = await collectionRef.get();
     listeItem = result.docs;
+    print(listeItem);
   }
   @override
   void initState() {
@@ -68,24 +70,21 @@ class _AccueilPageState extends State<AccueilPage> {
             ),
             MaterialButton(
               onPressed: () async {
-                //await GoogleSignIn().signOut();
-                //await FirebaseAuth.instance.signOut();
+                await GoogleSignIn().signOut();
+                await FirebaseAuth.instance.signOut();
                 setState(() {});
               },
               child: Text("signout " + (FirebaseAuth.instance.currentUser!.displayName != null?FirebaseAuth.instance.currentUser!.displayName.toString():"") ),
             ),
-            Flexible(child:             ListView.builder(
-                itemCount: listeItem.length,
-                itemBuilder: (Context, index){
-                  return ListTile(
-                    leading: Text("Info: ${listeItem[index].toString()}"),
-                    title: Text("Info"),
-                    trailing: Text("Info"),
-                  );
-                }
+            Flexible(child:
+            ListView(
+              children:
+              (listeItem!=null)?
+              listeItem.map<Widget>(
+                      (i) => ListTile(title: Text(i['first']))).toList()
+                  :[ListTile(title: Text("Loading"))].toList(),
             )
             )
-
           ],
         ),
       ),
