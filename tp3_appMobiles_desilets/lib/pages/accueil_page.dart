@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tp3_appmobiles_desilets/tiroir_nav.dart';
 import '../service.dart';
-
+import '../Model/transfert.dart';
 class AccueilPage extends StatefulWidget {
   const AccueilPage({super.key});
 
@@ -23,13 +23,21 @@ class _AccueilPageState extends State<AccueilPage> {
       "nom": "BogusApp",
     };
     database.collection("users").doc(currentUser!.uid).collection("Tasks").add(task);
-    setState(() {
-    });
+    setState(() {});
   }
   void _getList() async
   {
-    var result = await collectionRef.get();
-    listeItem = result.docs;
+    //Get la liste des users.
+    CollectionReference<Person> personnes = await collectionRef.withConverter(
+        fromFirestore: (snapshot, _) => Person.fromJson(snapshot.data()!),
+        toFirestore: (Person, _)=> Person.toJson());
+
+    //Get la liste des taks du user connecté.
+    CollectionReference<Task> taches = await personnes.doc(currentUser?.uid).collection("Tasks").withConverter(
+        fromFirestore: (snapshot, _) => Task.fromJson(snapshot.data()!),
+        toFirestore: (Task, _)=> Task.toJson());
+
+    listeItem = taches as List;
     print(listeItem);
     setState(() {});
   }
@@ -77,7 +85,7 @@ class _AccueilPageState extends State<AccueilPage> {
               children:
               (listeItem!=null)?
               listeItem.map<Widget>(
-                      (i) => ListTile(title: Text(i['first']))).toList()
+                      (i) => ListTile(title: Text(i['name']))).toList()
                   :[ListTile(title: Text("Loading"))].toList(),
             )
             )
