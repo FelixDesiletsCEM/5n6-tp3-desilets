@@ -1,29 +1,5 @@
 import 'dart:ffi';
 
-//import 'package:json_annotation/json_annotation.dart';
-
-//@JsonSerializable()
-class AddTaskRequest
-{
-  AddTaskRequest(this.name, this.deadline);
-  String name;
-  DateTime deadline;
-
-  //factory AddTaskRequest.fromJson(Map<String, dynamic> json) => _$AddTaskRequestFromJson(json);
-  //Map<String, dynamic> toJson() => _$AddTaskRequestToJson(this);
-}
-
-//@JsonSerializable()
-class ProgressEvent
-{
-  ProgressEvent(this.value, this.timestamp);
-  int value;
-  DateTime timestamp;
-
-  //factory ProgressEvent.fromJson(Map<String, dynamic> json) => _$ProgressEventFromJson(json);
-  //Map<String, dynamic> toJson() => _$ProgressEventToJson(this);
-}
-
 //@JsonSerializable()
 class HomeItemResponse
 {

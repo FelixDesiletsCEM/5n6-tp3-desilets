@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tp3_appmobiles_desilets/tiroir_nav.dart';
 import '../service.dart';
 
 class AccueilPage extends StatefulWidget {
@@ -12,20 +13,17 @@ class AccueilPage extends StatefulWidget {
 }
 
 class _AccueilPageState extends State<AccueilPage> {
-  int _counter = 0;
   List listeItem = [];
-  void _incrementCounter() {
-    final db = FirebaseFirestore.instance;
-    // Create a new user with a first and last name
-    final user = <String, dynamic>{
-      "first": "Ada",
-      "last": "Lovelace",
-      "born": 1815
+
+  final database = FirebaseFirestore.instance;
+//TODO S'arranger pour que currentUser devienne un User plutôt qu'un ?User. Ce serait moins chiant.
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  void _addTask() {
+    final task = <String, dynamic>{
+      "nom": "BogusApp",
     };
-    db.collection("users").add(user).then((DocumentReference doc) =>
-        print('DocumentSnapshot added with ID: ${doc.id}'));
+    database.collection("users").doc(currentUser!.uid).collection("Tasks").add(task);
     setState(() {
-      _counter++;
     });
   }
   void _getList() async
@@ -33,9 +31,12 @@ class _AccueilPageState extends State<AccueilPage> {
     var result = await collectionRef.get();
     listeItem = result.docs;
     print(listeItem);
+    setState(() {});
   }
+
   @override
   void initState() {
+  //Pas de initFirebase?
     FirebaseAuth.instance
         .authStateChanges()
         .listen((User? user) {
@@ -53,6 +54,7 @@ class _AccueilPageState extends State<AccueilPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: LeTiroir(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Accueil"),
@@ -61,13 +63,6 @@ class _AccueilPageState extends State<AccueilPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
             MaterialButton(
               onPressed: () async {
                 await GoogleSignIn().signOut();
@@ -76,6 +71,7 @@ class _AccueilPageState extends State<AccueilPage> {
               },
               child: Text("signout " + (FirebaseAuth.instance.currentUser!.displayName != null?FirebaseAuth.instance.currentUser!.displayName.toString():"") ),
             ),
+            TextButton(onPressed: (){_getList();}, child: Text("Refresh")),
             Flexible(child:
             ListView(
               children:
@@ -89,8 +85,8 @@ class _AccueilPageState extends State<AccueilPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _addTask,
+        tooltip: '_testFireBase',
         child: const Icon(Icons.add),
       ),
     );
