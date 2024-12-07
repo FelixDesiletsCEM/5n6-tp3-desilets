@@ -13,16 +13,22 @@ class AccueilPage extends StatefulWidget {
 }
 
 class _AccueilPageState extends State<AccueilPage> {
-  List listeItem = [];
+  var listeItem;
 
   final database = FirebaseFirestore.instance;
 //TODO S'arranger pour que currentUser devienne un User plutôt qu'un ?User. Ce serait moins chiant.
   User? currentUser = FirebaseAuth.instance.currentUser;
+
   void _addTask() {
-    final task = <String, dynamic>{
-      "nom": "BogusApp",
-    };
-    database.collection("users").doc(currentUser!.uid).collection("Tasks").add(task);
+    //La collection des taches de l'utilisateur connecté.
+    CollectionReference<Task> taskCollection = database.collection("users").doc(currentUser!.uid).collection("Tasks").withConverter(
+      fromFirestore: (doc, _) => Task.fromJson(doc.data()!),
+      toFirestore: (task, _)=> task.toJson(),);
+
+    //Créer la tache à ajouter.
+    Task task = new Task(1, "Test2", 0, 2, DateTime.now(), DateTime.now());
+    //Ajouter la tache à la liste des taches de l'utilisateur.
+    taskCollection.add(task);
     setState(() {});
   }
   void _getList() async
@@ -32,19 +38,23 @@ class _AccueilPageState extends State<AccueilPage> {
         fromFirestore: (snapshot, _) => Person.fromJson(snapshot.data()!),
         toFirestore: (Person, _)=> Person.toJson());
 
-    //Get la liste des taks du user connecté.
+    //Get la liste des tasks du user connecté.
     CollectionReference<Task> taches = await personnes.doc(currentUser?.uid).collection("Tasks").withConverter(
         fromFirestore: (snapshot, _) => Task.fromJson(snapshot.data()!),
         toFirestore: (Task, _)=> Task.toJson());
 
-    listeItem = taches as List;
-    print(listeItem);
+    CollectionReference<Task> test = database.collection("users").doc(currentUser?.uid).collection("Tasks").withConverter<Task>(
+        fromFirestore: (doc, _) => Task.fromJson(doc.data()!),
+        toFirestore: (task, _)=> task.toJson(),);
+
+  QuerySnapshot<Task> truc = await test.get();
+    listeItem = truc.docs;
+    print(listeItem.toString() + "ALKAOALOALOA");
     setState(() {});
   }
 
   @override
   void initState() {
-  //Pas de initFirebase?
     FirebaseAuth.instance
         .authStateChanges()
         .listen((User? user) {
@@ -53,8 +63,7 @@ class _AccueilPageState extends State<AccueilPage> {
       } else {
         print('User is signed in! ' + user.email!);
       }
-    }
-    );
+    });
 
     super.initState();
     _getList();
@@ -84,11 +93,12 @@ class _AccueilPageState extends State<AccueilPage> {
             ListView(
               children:
               (listeItem!=null)?
-              listeItem.map<Widget>(
-                      (i) => ListTile(title: Text(i['name']))).toList()
+                  //NOTE: Vu que le taskDoc n'est pas dynamique, si il y a un item dans firebase
+                  //qui n'est pas convertissable en Task, l'app crash.
+              listeItem.map<Widget>( (QueryDocumentSnapshot<Task> taskDoc) => ListTile(
+                  title: Text(taskDoc.data()!.name))).toList()
                   :[ListTile(title: Text("Loading"))].toList(),
-            )
-            )
+            ))
           ],
         ),
       ),
