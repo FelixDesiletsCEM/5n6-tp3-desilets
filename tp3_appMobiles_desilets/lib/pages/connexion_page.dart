@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:tp3_appmobiles_desilets/main.dart';
 import 'package:tp3_appmobiles_desilets/pages/inscription_page.dart';
 
+import '../service.dart';
 import '../tiroir_nav.dart';
 import 'accueil_page.dart';
 
@@ -57,21 +58,19 @@ class _ConnexionPageState extends State<ConnexionPage> {
               {
               await signInWithGoogle();
 
-              User? user = FirebaseAuth.instance.currentUser;
-
               final db = FirebaseFirestore.instance;
-              //TODO Ajouter un if pour par rajouter l'utilisateur à la bd si il existe déjà.
-              String firstname = user!.displayName!.split(" ")[0];
-              String lastname = user!.displayName!.split(" ")[1];
+              //TODO Ajouter un if pour pas rajouter l'utilisateur à la bd si il existe déjà.
+              String firstname = currentUser!.displayName!.split(" ")[0];
+              String lastname = currentUser!.displayName!.split(" ")[1];
               final tempUser = <String, dynamic>{
                 "first": firstname,
                 "last": lastname,
                 "born": 2000,
-                "email": user!.email != null?user!.email.toString():"",
-                "id": user!.uid != null?user!.uid:"",
+                "email": currentUser!.email.toString()??"",
+                "id": currentUser!.uid ?? "",
               };
               //Ajoute l'utilisateur (avec comme Id de document son uid).
-              db.collection("users").doc(user.uid).set(tempUser)/*.then((DocumentReference doc) =>
+              db.collection("users").doc(currentUser!.uid).set(tempUser)/*.then((DocumentReference doc) =>
                   print('DocumentSnapshot added with ID: ${doc.id}'))*/;
               setState(() {});
                 Navigator.push(

@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tp3_appmobiles_desilets/tiroir_nav.dart';
+import '../main.dart';
 import '../service.dart';
 import '../Model/transfert.dart';
+import 'consultation_page.dart';
 class AccueilPage extends StatefulWidget {
   const AccueilPage({super.key});
 
@@ -17,21 +19,9 @@ class _AccueilPageState extends State<AccueilPage> {
 
   final database = FirebaseFirestore.instance;
 //TODO S'arranger pour que currentUser devienne un User plutôt qu'un ?User. Ce serait moins chiant.
-  User? currentUser = FirebaseAuth.instance.currentUser;
 
-  void _addTask() {
-    //La collection des taches de l'utilisateur connecté.
-    CollectionReference<Task> taskCollection = database.collection("users").doc(currentUser!.uid).collection("Tasks").withConverter(
-      fromFirestore: (doc, _) => Task.fromJson(doc.data()!),
-      toFirestore: (task, _)=> task.toJson(),);
 
-    //Créer la tache à ajouter.
-    Task task = new Task(1, "Test2", 0, 2, DateTime.now(), DateTime.now());
-    //Ajouter la tache à la liste des taches de l'utilisateur.
-    taskCollection.add(task);
-    setState(() {});
-  }
-  void _getList() async
+  void getList() async
   {
     //Get la liste des users.
     CollectionReference<Person> personnes = await collectionRef.withConverter(
@@ -66,7 +56,7 @@ class _AccueilPageState extends State<AccueilPage> {
     });
 
     super.initState();
-    _getList();
+    getList();
   }
   @override
   Widget build(BuildContext context) {
@@ -80,15 +70,6 @@ class _AccueilPageState extends State<AccueilPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            MaterialButton(
-              onPressed: () async {
-                await GoogleSignIn().signOut();
-                await FirebaseAuth.instance.signOut();
-                setState(() {});
-              },
-              child: Text("signout " + (FirebaseAuth.instance.currentUser!.displayName != null?FirebaseAuth.instance.currentUser!.displayName.toString():"") ),
-            ),
-            TextButton(onPressed: (){_getList();}, child: Text("Refresh")),
             Flexible(child:
             ListView(
               children:
@@ -96,16 +77,25 @@ class _AccueilPageState extends State<AccueilPage> {
                   //NOTE: Vu que le taskDoc n'est pas dynamique, si il y a un item dans firebase
                   //qui n'est pas convertissable en Task, l'app crash.
               listeItem.map<Widget>( (QueryDocumentSnapshot<Task> taskDoc) => ListTile(
-                  title: Text(taskDoc.data()!.name))).toList()
+                onTap: (){Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConsultationPage(task: taskDoc.data()!),
+                  ),
+                );},
+                leading: Text(""),//TODO remplacer par une image.
+                  title: Text(taskDoc.data()!.name), 
+                  subtitle: Text(taskDoc.data()!.deadline.toIso8601String()),
+                  trailing: Text(taskDoc.data()!.percentageDone.toString()),)).toList()
                   :[ListTile(title: Text("Loading"))].toList(),
             ))
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addTask,
-        tooltip: '_testFireBase',
-        child: const Icon(Icons.add),
+        onPressed: getList,
+        tooltip: 'Refresh',
+        child: const Icon(Icons.refresh),
       ),
     );
   }

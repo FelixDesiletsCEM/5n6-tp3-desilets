@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tp3_appmobiles_desilets/pages/accueil_page.dart';
 import 'package:tp3_appmobiles_desilets/pages/connexion_page.dart';
+import 'package:tp3_appmobiles_desilets/pages/creation_page.dart';
 class LeTiroir extends StatefulWidget {
   const LeTiroir({super.key});
 
@@ -18,15 +21,16 @@ class LeTiroirState extends State<LeTiroir> {
         Container(
           height: 200,
         ),
-        //TODO Prendre le courriel pour de vrai. Surement créer un singleton lors du login?
-        Text("Courriel de l'utilisateur connecté"),
-        //Déconnexion
-        ListTile(
+        Text(FirebaseAuth.instance.currentUser?.email ?? ""),
+
+        ListTile(//Déconnexion de l'utilisateur
           dense: true,
           leading: const Icon(Icons.ac_unit),
           title: Text("Déconnexion"),
           onTap: () async{
-            // TODO déconnecter l'utilisateur.
+            await GoogleSignIn().signOut();
+            await FirebaseAuth.instance.signOut();
+            setState(() {});
             Navigator.of(context).pop();
             Navigator.push(
               context,
@@ -38,7 +42,7 @@ class LeTiroirState extends State<LeTiroir> {
           },
         ),
 
-        ListTile(
+        ListTile(//Redirige vers Accueil
           dense: true,
           leading: const Icon(Icons.ac_unit),
           title: Text("Accueil"),
@@ -51,6 +55,19 @@ class LeTiroirState extends State<LeTiroir> {
               ),
             );
             // Then close the drawer
+          },
+        ),
+        ListTile(//Redirige vers Creation
+          dense: true,
+          leading: const Icon(Icons.ac_unit),
+          title: Text("Creation"),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CreationPage(),
+              ),);
           },
         ),
       ],

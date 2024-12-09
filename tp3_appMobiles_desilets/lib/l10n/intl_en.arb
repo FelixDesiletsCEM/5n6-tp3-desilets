@@ -1,0 +1,35 @@
+{
+  "pageAccueilActualiserListe": "Refresh the list",
+  "pageAccueilTitre": "Home",
+
+  "pageConnexionConnexion": "Sign in",
+  "pageConnexionInscription": "Sign up",
+  "pageConnexionMotDePasse": "Password",
+  "pageConnexionNom": "Username",
+  "pageConnexionTitre": "Connection",
+
+  "pageConsultationEcheance": "Deadline",
+  "pageConsultationModifier": "Edit the task",
+  "pageConsultationNomTache": "Task name",
+  "pageConsultationNouvelleValeur": "New percentage",
+  "pageConsultationPourcentageCompletion": "Percentage of completion: ",
+  "pageConsultationPourcentageTemps": "Percentage of elpapsed time: ",
+  "pageConsultationTitre": "Consultation",
+  "pageConsultationImageChoisie": "The image has been chosen",
+  "pageConsultationChangerImage": "Change picture",
+
+  "pageCreationAjoutTache": "Add task",
+  "pageCreationNomTache": "Task name",
+  "pageCreationTitre": "Creation",
+  "pageCreationEntrerDate": "Enter date",
+  "SuppressionTache": "Delete",
+
+  "pageInscriptionConfirmation": "Confirm password",
+  "pageInscriptionTitre": "Inscription",
+  "pageInscriptionMotDePasseDifferent": "Passwords don't match.",
+  "UsernameAlreadyTaken": "This username is already taken.",
+  "PasswordTooShort" : "The password is too short.",
+  "NetworkError": "Network error",
+  "tiroirAjoutTache": "Add a task",
+  "tiroirDeconnexion": "Sign out"
+}

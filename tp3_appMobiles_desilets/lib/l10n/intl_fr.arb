@@ -1,0 +1,33 @@
+{
+  "pageAccueilActualiserListe": "Actualiser la liste",
+  "pageAccueilTitre": "Accueil",
+
+  "pageConnexionConnexion": "Se connecter",
+  "pageConnexionInscription": "S'inscrire",
+  "pageConnexionMotDePasse": "Mot de passe",
+  "pageConnexionNom": "Nom d'utilisateur",
+  "pageConnexionTitre": "Connexion",
+
+  "pageConsultationEcheance": "Date d'échéance: ",
+  "pageConsultationModifier": "Modifier la tache",
+  "pageConsultationNomTache": "Nom de la tâche: ",
+  "pageConsultationNouvelleValeur": "Nouveau Pourcentage",
+  "pageConsultationPourcentageCompletion": "Pourcentage de complétion: ",
+  "pageConsultationPourcentageTemps": "Pourcentage du temps écoulé: ",
+  "pageConsultationTitre": "Consultation",
+  "pageConsultationImageChoisie": "l'image a ete choisie ",
+  "pageConsultationChangerImage": "Changer l'image",
+  "pageCreationAjoutTache": "Ajouter la tache",
+  "pageCreationNomTache": "Nom de la tache",
+  "pageCreationTitre": "Creation",
+  "pageCreationEntrerDate": "Entrez la date",
+  "SuppressionTache": "Supprimer",
+  "pageInscriptionConfirmation": "Confirmer le mot de passe",
+  "pageInscriptionTitre": "Inscription",
+  "pageInscriptionMotDePasseDifferent": "Les mots de passes ne sont pas identique.",
+  "UsernameAlreadyTaken": "Un autre compte a déjà ce nom d'utilisateur.",
+  "PasswordTooShort" : "Le mot de passe est trop court.",
+  "NetworkError": "Erreur réseau",
+  "tiroirAjoutTache": "Ajout de tache",
+  "tiroirDeconnexion": "Déconnexion"
+}
