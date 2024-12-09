@@ -1,12 +1,6 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tp3_appmobiles_desilets/main.dart';
 import 'package:tp3_appmobiles_desilets/pages/inscription_page.dart';
-
 import '../service.dart';
 import '../tiroir_nav.dart';
 import 'accueil_page.dart';
@@ -60,12 +54,13 @@ class _ConnexionPageState extends State<ConnexionPage> {
 
               final db = FirebaseFirestore.instance;
               //TODO Ajouter un if pour pas rajouter l'utilisateur à la bd si il existe déjà.
+              //TODO Typé avec la classe person?
               String firstname = currentUser!.displayName!.split(" ")[0];
               String lastname = currentUser!.displayName!.split(" ")[1];
               final tempUser = <String, dynamic>{
                 "first": firstname,
                 "last": lastname,
-                "born": 2000,
+                "born": "",
                 "email": currentUser!.email.toString()??"",
                 "id": currentUser!.uid ?? "",
               };
@@ -83,9 +78,6 @@ class _ConnexionPageState extends State<ConnexionPage> {
               catch(e){
                 print(e);
               }
-
-
-
             },
                 child: Text("Connexion avec Google")),
 

@@ -74,6 +74,7 @@ class _CreationPage extends State<CreationPage> {
                     task.creationDate = DateTime.now();
                     task.deadline = DateTime.parse(dateController.text);*/
                     addTask(task);
+
                   }
                   catch(e){
                     print(e);

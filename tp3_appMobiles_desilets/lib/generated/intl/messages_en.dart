@@ -26,6 +26,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "PasswordTooShort":
             MessageLookupByLibrary.simpleMessage("The password is too short."),
         "SuppressionTache": MessageLookupByLibrary.simpleMessage("Delete"),
+        "TaskErrorDeadlineAlreadyPassed": MessageLookupByLibrary.simpleMessage(
+            "The deadline is already passed."),
+        "TaskErrorNameAlreadyUsed": MessageLookupByLibrary.simpleMessage(
+            "Another task already has that name."),
+        "TaskErrorNameEmpty":
+            MessageLookupByLibrary.simpleMessage("Task name can\'t be empty"),
         "UsernameAlreadyTaken": MessageLookupByLibrary.simpleMessage(
             "This username is already taken."),
         "pageAccueilActualiserListe":

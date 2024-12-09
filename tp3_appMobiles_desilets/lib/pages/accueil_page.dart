@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tp3_appmobiles_desilets/tiroir_nav.dart';
-import '../main.dart';
 import '../service.dart';
 import '../Model/transfert.dart';
 import 'consultation_page.dart';
@@ -15,31 +13,14 @@ class AccueilPage extends StatefulWidget {
 }
 
 class _AccueilPageState extends State<AccueilPage> {
-  var listeItem;
-
+  var listeTaches;
   final database = FirebaseFirestore.instance;
-//TODO S'arranger pour que currentUser devienne un User plutôt qu'un ?User. Ce serait moins chiant.
-
 
   void getList() async
   {
-    //Get la liste des users.
-    CollectionReference<Person> personnes = await collectionRef.withConverter(
-        fromFirestore: (snapshot, _) => Person.fromJson(snapshot.data()!),
-        toFirestore: (Person, _)=> Person.toJson());
-
-    //Get la liste des tasks du user connecté.
-    CollectionReference<Task> taches = await personnes.doc(currentUser?.uid).collection("Tasks").withConverter(
-        fromFirestore: (snapshot, _) => Task.fromJson(snapshot.data()!),
-        toFirestore: (Task, _)=> Task.toJson());
-
-    CollectionReference<Task> test = database.collection("users").doc(currentUser?.uid).collection("Tasks").withConverter<Task>(
-        fromFirestore: (doc, _) => Task.fromJson(doc.data()!),
-        toFirestore: (task, _)=> task.toJson(),);
-
-  QuerySnapshot<Task> truc = await test.get();
-    listeItem = truc.docs;
-    print(listeItem.toString() + "ALKAOALOALOA");
+  QuerySnapshot<Task> taches = await repoOfCurrentUser.get();
+  listeTaches = taches.docs;
+    print(listeTaches.toString());
     setState(() {});
   }
 
@@ -73,11 +54,11 @@ class _AccueilPageState extends State<AccueilPage> {
             Flexible(child:
             ListView(
               children:
-              (listeItem!=null)?
+              (listeTaches!=null)?
                   //NOTE: Vu que le taskDoc n'est pas dynamique, si il y a un item dans firebase
                   //qui n'est pas convertissable en Task, l'app crash.
-              listeItem.map<Widget>( (QueryDocumentSnapshot<Task> taskDoc) => ListTile(
-                onTap: (){Navigator.push(
+              listeTaches.map<Widget>( (QueryDocumentSnapshot<Task> taskDoc) => ListTile(
+                onTap: (){Navigator.push(//Quand on appuis, redirige vers les détails de la task.
                   context,
                   MaterialPageRoute(
                     builder: (context) => ConsultationPage(task: taskDoc.data()!),

@@ -17,17 +17,23 @@
   "pageConsultationTitre": "Consultation",
   "pageConsultationImageChoisie": "l'image a ete choisie ",
   "pageConsultationChangerImage": "Changer l'image",
+
   "pageCreationAjoutTache": "Ajouter la tache",
   "pageCreationNomTache": "Nom de la tache",
   "pageCreationTitre": "Creation",
   "pageCreationEntrerDate": "Entrez la date",
   "SuppressionTache": "Supprimer",
+
   "pageInscriptionConfirmation": "Confirmer le mot de passe",
   "pageInscriptionTitre": "Inscription",
   "pageInscriptionMotDePasseDifferent": "Les mots de passes ne sont pas identique.",
   "UsernameAlreadyTaken": "Un autre compte a déjà ce nom d'utilisateur.",
   "PasswordTooShort" : "Le mot de passe est trop court.",
   "NetworkError": "Erreur réseau",
+
+  "TaskErrorNameEmpty": "Le nom de la tâche ne peut pas être vide.",
+  "TaskErrorNameAlreadyUsed": "Une autre tâche possède déjà le même nom.",
+  "TaskErrorDeadlineAlreadyPassed": "La date d'échéance est déjà passée.",
   "tiroirAjoutTache": "Ajout de tache",
   "tiroirDeconnexion": "Déconnexion"
 }

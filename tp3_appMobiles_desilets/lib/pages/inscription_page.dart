@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class InscriptionPage extends StatefulWidget {
-  InscriptionPage({super.key});
+  const InscriptionPage({super.key});
   @override
   State<InscriptionPage> createState() => _InscriptionPageState();
 }

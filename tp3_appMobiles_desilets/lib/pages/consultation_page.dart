@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tp3_appmobiles_desilets/tiroir_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:tp3_appmobiles_desilets/Model/transfert.dart';
 import '../generated/l10n.dart';
-import '../main.dart';
-import '../service.dart';
 import 'accueil_page.dart';
+
 class ConsultationPage extends StatefulWidget {
   const ConsultationPage({super.key, required this.task});
 
@@ -40,7 +37,6 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
       setState(() {});
     } else if (state == AppLifecycleState.paused) {
       //TODO Sauvegarder les infos? Pour le refresh.
-
     }
   }
 
@@ -93,10 +89,10 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
                   builder: (context) => const AccueilPage(),
                 ),
               );
-            }, child: Text("S.of(context).pageConsultationModifier")),
+            }, child: Text(S.of(context).pageConsultationModifier)),
             ),
             Expanded(child:
-            OutlinedButton(onPressed: loading? null: (){}, child: Text("S.of(context).SuppressionTache")))
+            OutlinedButton(onPressed: loading? null: (){}, child: Text(S.of(context).SuppressionTache)))
           ],
         ),
       ),

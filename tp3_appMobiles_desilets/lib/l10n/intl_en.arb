@@ -30,6 +30,11 @@
   "UsernameAlreadyTaken": "This username is already taken.",
   "PasswordTooShort" : "The password is too short.",
   "NetworkError": "Network error",
+
+  "TaskErrorNameEmpty": "Task name can't be empty",
+  "TaskErrorNameAlreadyUsed": "Another task already has that name.",
+  "TaskErrorDeadlineAlreadyPassed": "The deadline is already passed.",
+
   "tiroirAjoutTache": "Add a task",
   "tiroirDeconnexion": "Sign out"
 }

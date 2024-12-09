@@ -320,6 +320,36 @@ class S {
     );
   }
 
+  /// `Task name can't be empty`
+  String get TaskErrorNameEmpty {
+    return Intl.message(
+      'Task name can\'t be empty',
+      name: 'TaskErrorNameEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Another task already has that name.`
+  String get TaskErrorNameAlreadyUsed {
+    return Intl.message(
+      'Another task already has that name.',
+      name: 'TaskErrorNameAlreadyUsed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The deadline is already passed.`
+  String get TaskErrorDeadlineAlreadyPassed {
+    return Intl.message(
+      'The deadline is already passed.',
+      name: 'TaskErrorDeadlineAlreadyPassed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Add a task`
   String get tiroirAjoutTache {
     return Intl.message(
