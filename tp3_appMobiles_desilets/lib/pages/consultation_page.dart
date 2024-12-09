@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tp3_appmobiles_desilets/service.dart';
 import 'package:tp3_appmobiles_desilets/tiroir_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:tp3_appmobiles_desilets/Model/transfert.dart';
@@ -7,7 +9,7 @@ import 'accueil_page.dart';
 class ConsultationPage extends StatefulWidget {
   const ConsultationPage({super.key, required this.task});
 
-  final Task task;
+  final QueryDocumentSnapshot<Task> task;
   @override
   State<ConsultationPage> createState() => _ConsultationPage();
 }
@@ -64,13 +66,13 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
               loading = false;}, child: Text(S.of(context).pageConsultationChangerImage)),
             ),
             Expanded(child:
-            Text("${S.of(context).pageConsultationNomTache} ${widget.task.name}"),
+            Text("${S.of(context).pageConsultationNomTache} ${widget.task.data().name}"),
             ),
             Expanded(child:
-            Text("${S.of(context).pageConsultationPourcentageCompletion} ${widget.task.percentageDone}"),
+            Text("${S.of(context).pageConsultationPourcentageCompletion} ${widget.task.data().percentageDone}"),
             ),
             Expanded(child:
-            Text("${S.of(context).pageConsultationPourcentageTemps} ${widget.task.percentageTimeSpent}"),
+            Text("${S.of(context).pageConsultationPourcentageTemps} ${widget.task.data().percentageTimeSpent}"),
             ),
             Expanded(child:
             TextField(
@@ -81,7 +83,16 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
             Expanded(child:
             OutlinedButton(onPressed: loading? null: ()async{
               loading = true;
-              //TODO Changer la tache.
+              try
+              {
+                //Note: editTask ne prend pas une task mais un QueryDocumentSnapshot<Task>.
+                editTask(widget.task, int.parse(pourcentageTextController.text));
+              }
+              catch(e){
+                print(e);
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(e.toString())));
+              }
               loading = false;
               Navigator.push(
                 context,
@@ -92,7 +103,15 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
             }, child: Text(S.of(context).pageConsultationModifier)),
             ),
             Expanded(child:
-            OutlinedButton(onPressed: loading? null: (){}, child: Text(S.of(context).SuppressionTache)))
+            OutlinedButton(onPressed: loading? null: (){
+            repoOfCurrentUser.doc(widget.task.id).delete();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AccueilPage(),
+              ),
+            );
+            }, child: Text(S.of(context).SuppressionTache)))
           ],
         ),
       ),

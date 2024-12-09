@@ -36,6 +36,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Un autre compte a déjà ce nom d\'utilisateur."),
         "pageAccueilActualiserListe":
             MessageLookupByLibrary.simpleMessage("Actualiser la liste"),
+        "pageAccueilLoading":
+            MessageLookupByLibrary.simpleMessage("Chargement"),
         "pageAccueilTitre": MessageLookupByLibrary.simpleMessage("Accueil"),
         "pageConnexionConnexion":
             MessageLookupByLibrary.simpleMessage("Se connecter"),

@@ -8,7 +8,7 @@ import 'generated/l10n.dart';
 
 User? currentUser = FirebaseAuth.instance.currentUser;
 
-final collectionUsers = FirebaseFirestore
+CollectionReference<Person> collectionUsers = FirebaseFirestore
     .instance
     .collection("users").withConverter(
     fromFirestore: (snapshot, _) => Person.fromJson(snapshot.data()!),
@@ -31,7 +31,8 @@ Future<UserCredential> signInWithGoogle() async {
   // Once signed in, return the UserCredential
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
-
+void addUser() {
+}
 void addTask(Task pTask) {
   try{
     if(_taskIsValid(pTask))
@@ -45,28 +46,25 @@ void addTask(Task pTask) {
     }
   }
   catch(e){
-    //TODO Afficher un message d'erreur dans l'app. Changer void par string, snackbar le résultat.
-    print(e);
+    //Rethrow pour pouvoir afficher le message dans l'app.
+    rethrow;
   }
 }
 
-void editTask(Task pTask) {
+void editTask(QueryDocumentSnapshot<Task> pTask, int pValue) {
   try
   {
-    if(_taskIsValid(pTask))
+    if(_taskIsValid(pTask.data()))
     {
-      //La collection des taches de l'utilisateur connecté.
-      CollectionReference<Task> taskCollection = FirebaseFirestore.instance.collection("users").doc(currentUser!.uid).collection("Tasks").withConverter(
-        fromFirestore: (doc, _) => Task.fromJson(doc.data()!),
-        toFirestore: (task, _)=> task.toJson(),);
-
-      //Changer la tache à la liste des taches de l'utilisateur.
-      DocumentReference<Task> taskDoc = taskCollection.doc(pTask.name);//TODO marche pas, faut le id.
-      taskDoc.set(pTask);
+      DocumentReference<Task> taskDoc = repoOfCurrentUser.doc(pTask.id);
+      Task nouvelleTask = pTask.data(); //Créer une copie de la task à modifier.
+      nouvelleTask.percentageDone = pValue;//Change le % de complétion.
+      taskDoc.set(nouvelleTask);//Change la task sur firestore pour la copie modifiée.
     }
   }
   catch(e){
-    print(e);
+    //Rethrow pour pouvoir afficher le message dans l'app.
+    rethrow;
   }
 }
 
@@ -82,10 +80,18 @@ bool _taskIsValid (Task pTask)
     throw new Exception(S.current.TaskErrorNameAlreadyUsed);
     return false;
   }
-  if(pTask.deadline.compareTo(DateTime.now()) > 0)//La deadline est dans le futur.
+  if(pTask.deadline.isBefore(DateTime.now()))//La deadline est dans le futur.
       {
     throw new Exception(S.current.TaskErrorDeadlineAlreadyPassed);
     return false;
   }
   return true;
+}
+
+int calculPourcentage(DateTime debut, DateTime fin){
+  Duration dureeTotal = fin.difference(debut);
+  Duration tempsEcoule = DateTime.now().difference(debut);
+
+  double pourcentage = ((tempsEcoule.inSeconds / dureeTotal.inSeconds) * 100);
+  return pourcentage.round();
 }

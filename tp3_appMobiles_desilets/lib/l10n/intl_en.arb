@@ -1,6 +1,7 @@
 {
   "pageAccueilActualiserListe": "Refresh the list",
   "pageAccueilTitre": "Home",
+  "pageAccueilLoading": "Loading",
 
   "pageConnexionConnexion": "Sign in",
   "pageConnexionInscription": "Sign up",

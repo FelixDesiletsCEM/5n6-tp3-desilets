@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tp3_appmobiles_desilets/pages/inscription_page.dart';
+import '../Model/transfert.dart';
 import '../service.dart';
 import '../tiroir_nav.dart';
 import 'accueil_page.dart';
@@ -13,7 +14,8 @@ class ConnexionPage extends StatefulWidget {
 }
 
 class _ConnexionPageState extends State<ConnexionPage> {
-  TextEditingController textEditingController = new TextEditingController();
+  TextEditingController UsernameController = new TextEditingController();
+  TextEditingController PasswordController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,11 +32,11 @@ class _ConnexionPageState extends State<ConnexionPage> {
             const Text(
               "Nom d\'utilisateur:",
             ),
-            TextField(controller: textEditingController, decoration: InputDecoration(hintText: "Nom d\'utilisateur"),),
+            TextField(controller: UsernameController, decoration: InputDecoration(hintText: "Nom d\'utilisateur"),),
             const Text(
               "Mot de passe:",
             ),
-            TextField(controller: textEditingController, decoration: InputDecoration(hintText: "Mot de passe"),),
+            TextField(controller: PasswordController, decoration: InputDecoration(hintText: "Mot de passe"),),
 
             OutlinedButton(onPressed: (){
               //TODO Connecter l'utilisateur avec le nom d'utilisateur et le mot de passe.
@@ -52,7 +54,6 @@ class _ConnexionPageState extends State<ConnexionPage> {
               {
               await signInWithGoogle();
 
-              final db = FirebaseFirestore.instance;
               //TODO Ajouter un if pour pas rajouter l'utilisateur à la bd si il existe déjà.
               //TODO Typé avec la classe person?
               String firstname = currentUser!.displayName!.split(" ")[0];
@@ -64,8 +65,9 @@ class _ConnexionPageState extends State<ConnexionPage> {
                 "email": currentUser!.email.toString()??"",
                 "id": currentUser!.uid ?? "",
               };
+              Person person = new Person("nom", "mdp", "test@test.com");
               //Ajoute l'utilisateur (avec comme Id de document son uid).
-              db.collection("users").doc(currentUser!.uid).set(tempUser)/*.then((DocumentReference doc) =>
+              FirebaseFirestore.instance.doc(currentUser!.uid).set(tempUser)/*.then((DocumentReference doc) =>
                   print('DocumentSnapshot added with ID: ${doc.id}'))*/;
               setState(() {});
                 Navigator.push(

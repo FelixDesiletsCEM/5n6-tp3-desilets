@@ -36,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "This username is already taken."),
         "pageAccueilActualiserListe":
             MessageLookupByLibrary.simpleMessage("Refresh the list"),
+        "pageAccueilLoading": MessageLookupByLibrary.simpleMessage("Loading"),
         "pageAccueilTitre": MessageLookupByLibrary.simpleMessage("Home"),
         "pageConnexionConnexion":
             MessageLookupByLibrary.simpleMessage("Sign in"),

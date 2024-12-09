@@ -1,6 +1,7 @@
 {
   "pageAccueilActualiserListe": "Actualiser la liste",
   "pageAccueilTitre": "Accueil",
+  "pageAccueilLoading": "Chargement",
 
   "pageConnexionConnexion": "Se connecter",
   "pageConnexionInscription": "S'inscrire",

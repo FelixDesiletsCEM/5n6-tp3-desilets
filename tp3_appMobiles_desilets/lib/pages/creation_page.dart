@@ -50,41 +50,36 @@ class _CreationPage extends State<CreationPage> {
                       initialDate: DateTime.now(), //get today's date
                       firstDate: DateTime.now(), //DateTime.now() - not to allow to choose before today.
                       lastDate: DateTime(2101)
-
                   );
                   deadline = pickedDate!;
                   setState(() {});
                 }
-
             ),
             OutlinedButton(
                 onPressed: loading? null: () async {
                   //TODO LES IDS SONT PAS PK!
                   loading = true;
                   try{
-                    Task task = Task(3,
+                    Task task = Task(
                         tasknameTextController.text,
                         0,
                         0,
                         DateTime.now(),
                         deadline);
-                    /*task.name = tasknameTextController.text;
-                    task.percentageDone = 0;
-                    task.percentageTimeSpent =  0;
-                    task.creationDate = DateTime.now();
-                    task.deadline = DateTime.parse(dateController.text);*/
                     addTask(task);
-
+                    //Redirige vers l'accueil si la création réussi.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AccueilPage(),
+                      ),
+                    );
                   }
                   catch(e){
                     print(e);
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(e.toString())));
                   }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AccueilPage(),
-                    ),
-                  );
                   loading = false;},
                 child: Text(S.of(context).pageCreationAjoutTache)
             )

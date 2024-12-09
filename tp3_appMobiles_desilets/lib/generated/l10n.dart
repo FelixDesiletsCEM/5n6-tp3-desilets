@@ -70,6 +70,16 @@ class S {
     );
   }
 
+  /// `Loading`
+  String get pageAccueilLoading {
+    return Intl.message(
+      'Loading',
+      name: 'pageAccueilLoading',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Sign in`
   String get pageConnexionConnexion {
     return Intl.message(

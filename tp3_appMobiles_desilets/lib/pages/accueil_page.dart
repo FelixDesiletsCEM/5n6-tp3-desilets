@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tp3_appmobiles_desilets/tiroir_nav.dart';
+import '../generated/l10n.dart';
 import '../service.dart';
 import '../Model/transfert.dart';
 import 'consultation_page.dart';
@@ -61,21 +62,23 @@ class _AccueilPageState extends State<AccueilPage> {
                 onTap: (){Navigator.push(//Quand on appuis, redirige vers les détails de la task.
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ConsultationPage(task: taskDoc.data()!),
+                    builder: (context) => ConsultationPage(task: taskDoc),
                   ),
                 );},
                 leading: Text(""),//TODO remplacer par une image.
-                  title: Text(taskDoc.data()!.name), 
-                  subtitle: Text(taskDoc.data()!.deadline.toIso8601String()),
-                  trailing: Text(taskDoc.data()!.percentageDone.toString()),)).toList()
-                  :[ListTile(title: Text("Loading"))].toList(),
+                  title: Text(taskDoc.data().name),
+                  subtitle: Text(taskDoc.data().deadline.toIso8601String()),
+                  trailing: Text(taskDoc.data().percentageDone.toString())
+
+                ,)).toList()
+                  :[ListTile(title: Text(S.of(context).pageAccueilLoading))].toList(),
             ))
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: getList,
-        tooltip: 'Refresh',
+        tooltip: S.of(context).pageAccueilActualiserListe,
         child: const Icon(Icons.refresh),
       ),
     );
