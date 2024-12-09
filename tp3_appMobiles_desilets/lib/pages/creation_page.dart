@@ -4,7 +4,6 @@ import '../Model/transfert.dart';
 import '../generated/l10n.dart';
 import '../service.dart';
 import 'accueil_page.dart';
-import 'package:flutter/services.dart';
 
 class CreationPage extends StatefulWidget {
   const CreationPage({super.key});
@@ -39,7 +38,7 @@ class _CreationPage extends State<CreationPage> {
             TextField(
                 controller: dateController, //editing controller of this TextField
                 decoration:  InputDecoration(
-                    icon: Icon(Icons.calendar_today), //icon of text field
+                    icon: const Icon(Icons.calendar_today), //icon of text field
                     labelText: deadline == DateTime.utc(1, 1, 1, 1,1,1)? S.of(context).pageCreationEntrerDate : deadline.toString() //label text of field
                 ),
                 readOnly: true,  // when true user cannot edit text
@@ -66,7 +65,7 @@ class _CreationPage extends State<CreationPage> {
                         0,
                         DateTime.now(),
                         deadline);
-                    addTask(task);
+                    await addTask(task);
                     //Redirige vers l'accueil si la création réussi.
                     Navigator.push(
                       context,

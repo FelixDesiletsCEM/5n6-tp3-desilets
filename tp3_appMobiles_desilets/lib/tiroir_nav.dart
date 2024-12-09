@@ -28,6 +28,7 @@ class LeTiroirState extends State<LeTiroir> {
           leading: const Icon(Icons.ac_unit),
           title: Text("Déconnexion"),
           onTap: () async{
+            //TODO Marche juste avec google signin?
             await GoogleSignIn().signOut();
             await FirebaseAuth.instance.signOut();
             setState(() {});

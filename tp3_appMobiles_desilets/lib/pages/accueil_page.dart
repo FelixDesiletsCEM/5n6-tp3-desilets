@@ -67,10 +67,9 @@ class _AccueilPageState extends State<AccueilPage> {
                 );},
                 leading: Text(""),//TODO remplacer par une image.
                   title: Text(taskDoc.data().name),
-                  subtitle: Text(taskDoc.data().deadline.toIso8601String()),
-                  trailing: Text(taskDoc.data().percentageDone.toString())
-
-                ,)).toList()
+                  subtitle: Text("Deadline: " + taskDoc.data().deadline.toIso8601String() + " (${calculPourcentage(taskDoc.data().creationDate, taskDoc.data().deadline).toString()}%)"),
+                  trailing: Text(taskDoc.data().percentageDone.toString() + "% done")
+                )).toList()
                   :[ListTile(title: Text(S.of(context).pageAccueilLoading))].toList(),
             ))
           ],

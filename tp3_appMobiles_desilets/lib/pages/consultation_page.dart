@@ -71,7 +71,7 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
             Expanded(child:
             Text("${S.of(context).pageConsultationPourcentageCompletion} ${widget.task.data().percentageDone}"),
             ),
-            Expanded(child:
+            Expanded(child://TODO truc date calcul %.
             Text("${S.of(context).pageConsultationPourcentageTemps} ${widget.task.data().percentageTimeSpent}"),
             ),
             Expanded(child:
@@ -111,7 +111,7 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
                 builder: (context) => const AccueilPage(),
               ),
             );
-            }, child: Text(S.of(context).SuppressionTache)))
+            }, child: Text(S.of(context).SuppressionTache))),
           ],
         ),
       ),

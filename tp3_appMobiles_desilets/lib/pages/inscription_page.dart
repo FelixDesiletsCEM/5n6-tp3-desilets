@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tp3_appmobiles_desilets/pages/connexion_page.dart';
-
 import '../Model/transfert.dart';
 import '../generated/l10n.dart';
 import '../service.dart';
@@ -13,7 +11,7 @@ class InscriptionPage extends StatefulWidget {
 }
 
 class _InscriptionPageState extends State<InscriptionPage> {
-  TextEditingController textEditingController = new TextEditingController();
+  TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

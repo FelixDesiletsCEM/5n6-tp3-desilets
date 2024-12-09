@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'Model/transfert.dart';
 import 'generated/l10n.dart';
@@ -33,16 +32,12 @@ Future<UserCredential> signInWithGoogle() async {
 }
 void addUser() {
 }
-void addTask(Task pTask) {
+Future<void> addTask(Task pTask) async {
   try{
-    if(_taskIsValid(pTask))
+    if(await _taskIsValid(pTask))
     {
-      //La collection des taches de l'utilisateur connecté.
-      CollectionReference<Task> taskCollection = FirebaseFirestore.instance.collection("users").doc(currentUser!.uid).collection("Tasks").withConverter(
-        fromFirestore: (doc, _) => Task.fromJson(doc.data()!),
-        toFirestore: (task, _)=> task.toJson(),);
       //Ajouter la tache au repo de l'utilisateur connecté, si elle est valide.
-      taskCollection.add(pTask);
+      repoOfCurrentUser.add(pTask);
     }
   }
   catch(e){
@@ -51,10 +46,11 @@ void addTask(Task pTask) {
   }
 }
 
-void editTask(QueryDocumentSnapshot<Task> pTask, int pValue) {
+Future<void> editTask(QueryDocumentSnapshot<Task> pTask, int pValue) async {
   try
   {
-    if(_taskIsValid(pTask.data()))
+    //Fail forcément le 2e if. Peut-être changer plus tard.
+    //if(await _taskIsValid(pTask.data()))
     {
       DocumentReference<Task> taskDoc = repoOfCurrentUser.doc(pTask.id);
       Task nouvelleTask = pTask.data(); //Créer une copie de la task à modifier.
@@ -68,21 +64,22 @@ void editTask(QueryDocumentSnapshot<Task> pTask, int pValue) {
   }
 }
 
-bool _taskIsValid (Task pTask)
-{
+Future<bool> _taskIsValid (Task pTask)
+async {
   if(pTask.name.trim() == "")//Le nom n'est pas vide.
       {
-    throw new Exception(S.current.TaskErrorNameEmpty);
+    throw Exception(S.current.TaskErrorNameEmpty);
     return false;
   }
-  if(false)//Vérifier qu'il n'y a pas une tache avec le même nom.
+  QuerySnapshot<Task> taches = await repoOfCurrentUser.get();
+  if(taches.docs.where((t)=> t.data().name == pTask.name).isNotEmpty)//Vérifier qu'il n'y a pas une tache avec le même nom.
       {
-    throw new Exception(S.current.TaskErrorNameAlreadyUsed);
+    throw Exception(S.current.TaskErrorNameAlreadyUsed);
     return false;
   }
   if(pTask.deadline.isBefore(DateTime.now()))//La deadline est dans le futur.
       {
-    throw new Exception(S.current.TaskErrorDeadlineAlreadyPassed);
+    throw Exception(S.current.TaskErrorDeadlineAlreadyPassed);
     return false;
   }
   return true;
@@ -91,7 +88,12 @@ bool _taskIsValid (Task pTask)
 int calculPourcentage(DateTime debut, DateTime fin){
   Duration dureeTotal = fin.difference(debut);
   Duration tempsEcoule = DateTime.now().difference(debut);
+  double pourcentage = 1;
 
-  double pourcentage = ((tempsEcoule.inSeconds / dureeTotal.inSeconds) * 100);
+  if(dureeTotal.inSeconds != 0)
+  {
+    pourcentage = ((tempsEcoule.inSeconds / dureeTotal.inSeconds) * 100);
+  }
+
   return pourcentage.round();
 }

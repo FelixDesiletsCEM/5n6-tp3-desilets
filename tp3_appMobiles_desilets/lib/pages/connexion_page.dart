@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tp3_appmobiles_desilets/pages/inscription_page.dart';
 import '../Model/transfert.dart';
+import '../generated/l10n.dart';
 import '../service.dart';
 import '../tiroir_nav.dart';
 import 'accueil_page.dart';
@@ -29,27 +31,29 @@ class _ConnexionPageState extends State<ConnexionPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              "Nom d\'utilisateur:",
-            ),
-            TextField(controller: UsernameController, decoration: InputDecoration(hintText: "Nom d\'utilisateur"),),
-            const Text(
-              "Mot de passe:",
-            ),
-            TextField(controller: PasswordController, decoration: InputDecoration(hintText: "Mot de passe"),),
+            Text('${S.of(context).pageConnexionNom}:'),
+            TextField(controller: UsernameController, decoration: InputDecoration(hintText: S.of(context).pageConnexionNom),),
+            Text('${S.of(context).pageConnexionMotDePasse}:'),
+            TextField(controller: PasswordController, decoration: InputDecoration(hintText: S.of(context).pageConnexionMotDePasse),),
 
-            OutlinedButton(onPressed: (){
+            OutlinedButton(onPressed: () async {
               //TODO Connecter l'utilisateur avec le nom d'utilisateur et le mot de passe.
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AccueilPage(),
-                ),
-              );
+              try
+              {
+                await FirebaseAuth.instance.signInWithEmailAndPassword(email: UsernameController.text, password: PasswordController.text);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AccueilPage(),
+                  ),
+                );
+              }
+              catch(e){
+                print(e);
+              }
             }, child: Text("Connexion")),
 
             OutlinedButton(onPressed: ()async{
-              //TODO Connecter l'utilisateur avec un compte Google.
               try
               {
               await signInWithGoogle();
@@ -91,6 +95,7 @@ class _ConnexionPageState extends State<ConnexionPage> {
                 ),
               );
             }, child: Text("Inscription")),
+
           ],
         ),
       ),
