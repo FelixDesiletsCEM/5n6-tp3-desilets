@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:tp3_appmobiles_desilets/tiroir_nav.dart';
 import '../generated/l10n.dart';
 import '../service.dart';
 import '../Model/transfert.dart';
 import 'consultation_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 class AccueilPage extends StatefulWidget {
   const AccueilPage({super.key});
 
@@ -27,9 +28,9 @@ class _AccueilPageState extends State<AccueilPage> {
 
   @override
   void initState() {
-    FirebaseAuth.instance
+    firebase_auth.FirebaseAuth.instance
         .authStateChanges()
-        .listen((User? user) {
+        .listen((firebase_auth.User? user) {
       if (user == null) {
         print('User is currently signed out!');
       } else {
@@ -65,7 +66,7 @@ class _AccueilPageState extends State<AccueilPage> {
                     builder: (context) => ConsultationPage(task: taskDoc),
                   ),
                 );},
-                leading: Text(""),//TODO remplacer par une image.
+                leading: Image.network(taskDoc.data().imageUrl),//TODO remplacer par une image.
                   title: Text(taskDoc.data().name),
                   subtitle: Text("Deadline: " + taskDoc.data().deadline.toIso8601String() + " (${calculPourcentage(taskDoc.data().creationDate, taskDoc.data().deadline).toString()}%)"),
                   trailing: Text(taskDoc.data().percentageDone.toString() + "% done")

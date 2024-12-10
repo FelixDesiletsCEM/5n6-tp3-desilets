@@ -48,7 +48,7 @@ Future<void> addTask(Task pTask) async {
   }
 }
 
-Future<void> editTask(QueryDocumentSnapshot<Task> pTask, int pValue) async {
+Future<void> editTask(QueryDocumentSnapshot<Task> pTask, int pValue, String pImageUrl) async {
   try
   {
     //Fail forcément le 2e if. Peut-être changer plus tard.
@@ -57,6 +57,7 @@ Future<void> editTask(QueryDocumentSnapshot<Task> pTask, int pValue) async {
       DocumentReference<Task> taskDoc = repoOfCurrentUser.doc(pTask.id);
       Task nouvelleTask = pTask.data(); //Créer une copie de la task à modifier.
       nouvelleTask.percentageDone = pValue;//Change le % de complétion.
+      nouvelleTask.imageUrl = pImageUrl;
       taskDoc.set(nouvelleTask);//Change la task sur firestore pour la copie modifiée.
     }
   }

@@ -14,7 +14,7 @@ class Task
   DateTime deadline = DateTime.utc(0,0,0,0,0,0);
   int percentageDone = 0;
   double percentageTimeSpent = 0;
-
+  String imageUrl = "https://qtnjlvjljrnkebcwpvfi.supabase.co/storage/v1/object/public/supabucket/default.jpg?t=2024-12-10T21%3A20%3A15.832Z";
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 
   Map<String, dynamic> toJson() => _$TaskToJson(this);

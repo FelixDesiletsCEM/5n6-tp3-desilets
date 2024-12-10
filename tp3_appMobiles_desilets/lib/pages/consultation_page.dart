@@ -29,7 +29,7 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
     final supabase = Supabase.instance.client;
 
     String bucketid = "supabucket";
-    try {
+    /*try {
       await supabase
           .storage
           .createBucket(bucketid, BucketOptions(public: true));
@@ -38,20 +38,30 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
         // Le bucket existe déjà
         print(e);
       }
+    }*/
+
+    try
+    {
+      final String fullPath = await supabase
+          .storage
+          .from(bucketid)
+          .upload(
+        //TODO Mettre un nom unique
+          xfile.name,
+          File(xfile.path)
+      );
+      print(fullPath);
     }
-    final String fullPath = await supabase
-        .storage
-        .from(bucketid)
-        .upload(
-      //TODO Mettre un nom unique
-        xfile.name,
-        File(xfile.path)
-    );
-    print(fullPath);
+    catch(e){
+      print(e);
+    }
+
     _publicUrl = supabase
         .storage
         .from(bucketid)
         .getPublicUrl(xfile.name);
+
+
   }
 
   Future getImage() async {
@@ -69,6 +79,7 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
   @override
   void initState() {
     super.initState();
+    _publicUrl = widget.task.data().imageUrl;
     setState(() {});
   }
 
@@ -100,7 +111,8 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             //TODO Marche pas, il faut remplacer par l'url de l'image.
-            Expanded(child: Image.network(_publicUrl??Supabase.instance.client.storage.from("supabucket").getPublicUrl("testchien.jpg"))),
+            Expanded(child: Image.network(_publicUrl)),
+            //Expanded(child: Image.network(),
             Expanded(child:
             OutlinedButton(onPressed: isLoading? null: ()async {
               //loading = true;
@@ -129,7 +141,8 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
               try
               {
                 //Note: editTask ne prend pas une task mais un QueryDocumentSnapshot<Task>.
-                editTask(widget.task, int.parse(pourcentageTextController.text));
+
+                editTask(widget.task, int.parse(pourcentageTextController.text!=""?pourcentageTextController.text:widget.task.data().percentageDone.toString()), _publicUrl);
               }
               catch(e){
                 print(e);

@@ -11,7 +11,8 @@ class InscriptionPage extends StatefulWidget {
 }
 
 class _InscriptionPageState extends State<InscriptionPage> {
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +25,14 @@ class _InscriptionPageState extends State<InscriptionPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
              Text('${S.of(context).pageConnexionNom}:'),
-            TextField(controller: textEditingController, decoration: InputDecoration(hintText: S.of(context).pageConnexionNom),),
+            TextField(controller: usernameController, decoration: InputDecoration(hintText: S.of(context).pageConnexionNom),),
              Text('${S.of(context).pageConnexionMotDePasse}:'),
-            TextField(controller: textEditingController, decoration: InputDecoration(hintText: S.of(context).pageConnexionMotDePasse),),
+            TextField(controller: passwordController, decoration: InputDecoration(hintText: S.of(context).pageConnexionMotDePasse),),
             OutlinedButton(onPressed: (){
               //TODO Inscrire l'utilisateur avec le nom d'utilisateur et le mot de passe.
-              Person person = new Person("nom", "mdp", "test@test.com");
+              Person person = new Person(usernameController.text, passwordController.text, "test@test.com");
               //Ajoute l'utilisateur (avec comme Id de document son uid, généré par firebase).
+              //TODO il faut signin avant!
               collectionUsers.doc(currentUser!.uid).set(person)/*.then((DocumentReference doc) =>
                   print('DocumentSnapshot added with ID: ${doc.id}'))*/;
             }, child: Text(S.of(context).pageInscriptionTitre)),

@@ -12,7 +12,7 @@
 
   "pageConsultationEcheance": "Deadline",
   "pageConsultationModifier": "Edit the task",
-  "pageConsultationNomTache": "Task name",
+  "pageConsultationNomTache": "Task name:",
   "pageConsultationNouvelleValeur": "New percentage",
   "pageConsultationPourcentageCompletion": "Percentage of completion: ",
   "pageConsultationPourcentageTemps": "Percentage of elpapsed time: ",
