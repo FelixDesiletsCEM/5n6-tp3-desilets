@@ -46,7 +46,6 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
           .storage
           .from(bucketid)
           .upload(
-        //TODO Mettre un nom unique
           xfile.name,
           File(xfile.path)
       );
@@ -94,7 +93,6 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
     if (state == AppLifecycleState.resumed) {
       setState(() {});
     } else if (state == AppLifecycleState.paused) {
-      //TODO Sauvegarder les infos? Pour le refresh.
     }
   }
 
@@ -110,13 +108,11 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //TODO Marche pas, il faut remplacer par l'url de l'image.
             Expanded(child: Image.network(_publicUrl)),
             //Expanded(child: Image.network(),
             Expanded(child:
             OutlinedButton(onPressed: isLoading? null: ()async {
               //loading = true;
-              //TODO Changer image
               await getImage();
               isLoading = false;}, child: Text(S.of(context).pageConsultationChangerImage)),
             ),
@@ -126,7 +122,7 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
             Expanded(child:
             Text("${S.of(context).pageConsultationPourcentageCompletion} ${widget.task.data().percentageDone}"),
             ),
-            Expanded(child://TODO truc date calcul %.
+            Expanded(child:
             Text("${S.of(context).pageConsultationPourcentageTemps} ${widget.task.data().percentageTimeSpent}"),
             ),
             Expanded(child:
@@ -142,7 +138,7 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
               {
                 //Note: editTask ne prend pas une task mais un QueryDocumentSnapshot<Task>.
 
-                editTask(widget.task, int.parse(pourcentageTextController.text!=""?pourcentageTextController.text:widget.task.data().percentageDone.toString()), _publicUrl);
+                FirestoreService.editTask(widget.task, int.parse(pourcentageTextController.text!=""?pourcentageTextController.text:widget.task.data().percentageDone.toString()), _publicUrl);
               }
               catch(e){
                 print(e);
@@ -160,7 +156,7 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
             ),
             Expanded(child:
             OutlinedButton(onPressed: isLoading? null: (){
-            repoOfCurrentUser.doc(widget.task.id).delete();
+              FirestoreService.getUserTasks().doc(widget.task.id).delete();
             Navigator.push(
               context,
               MaterialPageRoute(

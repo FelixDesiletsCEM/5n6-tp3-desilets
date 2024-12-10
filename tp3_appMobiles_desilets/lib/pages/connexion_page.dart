@@ -24,8 +24,6 @@ class _ConnexionPageState extends State<ConnexionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //TODO Enlever le tiroir.
-      drawer: LeTiroir(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(S.of(context).pageConnexionTitre),
@@ -40,7 +38,6 @@ class _ConnexionPageState extends State<ConnexionPage> {
             TextField(controller: PasswordController, decoration: InputDecoration(hintText: S.of(context).pageConnexionMotDePasse),),
 
             OutlinedButton(onPressed: () async {
-              //TODO Connecter l'utilisateur avec le nom d'utilisateur et le mot de passe.
               try
               {
                 await FirebaseAuth.instance.signInWithEmailAndPassword(email: UsernameController.text, password: PasswordController.text);
@@ -60,10 +57,7 @@ class _ConnexionPageState extends State<ConnexionPage> {
               try
               {
               await signInWithGoogle();
-
-              //TODO Ajouter un if pour pas rajouter l'utilisateur à la bd si il existe déjà.
-              //TODO Typé avec la classe person?
-              String firstname = currentUser!.displayName!.split(" ")[0];
+              /*String firstname = currentUser!.displayName!.split(" ")[0];
               String lastname = currentUser!.displayName!.split(" ")[1];
               final tempUser = <String, dynamic>{
                 "first": firstname,
@@ -74,7 +68,7 @@ class _ConnexionPageState extends State<ConnexionPage> {
               };
               Person person = new Person("nom", "mdp", "test@test.com");
               //Ajoute l'utilisateur (avec comme Id de document son uid).
-              FirebaseFirestore.instance.doc(currentUser!.uid).set(tempUser)/*.then((DocumentReference doc) =>
+              FirebaseFirestore.instance.doc(currentUser!.uid).set(tempUser)*//*.then((DocumentReference doc) =>
                   print('DocumentSnapshot added with ID: ${doc.id}'))*/;
               setState(() {});
                 Navigator.push(

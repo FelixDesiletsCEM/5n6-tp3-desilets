@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tp3_appmobiles_desilets/pages/connexion_page.dart';
 import '../Model/transfert.dart';
@@ -13,6 +14,25 @@ class InscriptionPage extends StatefulWidget {
 class _InscriptionPageState extends State<InscriptionPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  inscription() async {
+    //Person person = new Person(usernameController.text.split('@')[0], passwordController.text, usernameController.text);
+    //Ajoute l'utilisateur (avec comme Id de document son uid, généré par firebase).
+    try{
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: usernameController.text,
+          password: passwordController.text
+      );
+    }
+    catch(e){print(e);}
+    //FirebaseAuth.instance.authStateChanges();
+    //await FirebaseAuth.instance.signInWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
+    //FirebaseAuth.instance.authStateChanges();
+    /*person.id = currentUser!.uid;
+    collectionUsers.doc(person.id).set(person)*//*.then((DocumentReference doc) =>
+                  print('DocumentSnapshot added with ID: ${doc.id}'))*/;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,19 +44,14 @@ class _InscriptionPageState extends State<InscriptionPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-             Text('${S.of(context).pageConnexionNom}:'),
+            Text('${S.of(context).pageConnexionNom}:'),
             TextField(controller: usernameController, decoration: InputDecoration(hintText: S.of(context).pageConnexionNom),),
-             Text('${S.of(context).pageConnexionMotDePasse}:'),
+            Text('${S.of(context).pageConnexionMotDePasse}:'),
             TextField(controller: passwordController, decoration: InputDecoration(hintText: S.of(context).pageConnexionMotDePasse),),
-            OutlinedButton(onPressed: (){
-              //TODO Inscrire l'utilisateur avec le nom d'utilisateur et le mot de passe.
-              Person person = new Person(usernameController.text, passwordController.text, "test@test.com");
-              //Ajoute l'utilisateur (avec comme Id de document son uid, généré par firebase).
-              //TODO il faut signin avant!
-              collectionUsers.doc(currentUser!.uid).set(person)/*.then((DocumentReference doc) =>
-                  print('DocumentSnapshot added with ID: ${doc.id}'))*/;
-            }, child: Text(S.of(context).pageInscriptionTitre)),
-
+            OutlinedButton(
+                onPressed: inscription,
+                child: Text(S.of(context).pageInscriptionTitre)
+            ),
             OutlinedButton(onPressed: (){
               Navigator.push(
                 context,

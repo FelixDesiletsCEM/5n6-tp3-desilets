@@ -5,9 +5,79 @@ import 'Model/transfert.dart';
 import 'generated/l10n.dart';
 
 
-User? currentUser = FirebaseAuth.instance.currentUser;
+class FirestoreService {
 
-CollectionReference<Person> collectionUsers = FirebaseFirestore
+  static CollectionReference<Task> getUserTasks() {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(getUser().uid)
+        .collection("Tasks").withConverter(
+        fromFirestore: (snapshot, _) => Task.fromFirestore(snapshot),
+        toFirestore: (Task, _)=> Task.toJson()
+    );
+  }
+
+  static getUser() {
+    return FirebaseAuth.instance.currentUser;
+  }
+
+  static Future<void> addTask(Task pTask) async {
+    try{
+      if(await _taskIsValid(pTask))
+      {
+        //Ajouter la tache au repo de l'utilisateur connecté, si elle est valide.
+        getUserTasks().add(pTask);
+      }
+    }
+    catch(e){
+      //Rethrow pour pouvoir afficher le message dans l'app.
+      rethrow;
+    }
+  }
+
+  static Future<void> editTask(QueryDocumentSnapshot<Task> pTask, int pValue, String pImageUrl) async {
+    try
+    {
+      //Fail forcément le 2e if. Peut-être changer plus tard.
+      //if(await _taskIsValid(pTask.data()))
+      {
+        DocumentReference<Task> taskDoc = getUserTasks().doc(pTask.id);
+        Task nouvelleTask = pTask.data(); //Créer une copie de la task à modifier.
+        nouvelleTask.percentageDone = pValue;//Change le % de complétion.
+        nouvelleTask.imageUrl = pImageUrl;
+        taskDoc.set(nouvelleTask);//Change la task sur firestore pour la copie modifiée.
+      }
+    }
+    catch(e){
+      //Rethrow pour pouvoir afficher le message dans l'app.
+      rethrow;
+    }
+  }
+
+  static Future<bool> _taskIsValid (Task pTask) async {
+    if(pTask.name.trim() == "")//Le nom n'est pas vide.
+        {
+      throw Exception(S.current.TaskErrorNameEmpty);
+      return false;
+    }
+    QuerySnapshot<Task> taches = await getUserTasks().get();
+    if(taches.docs.where((t)=> t.data().name == pTask.name).isNotEmpty)//Vérifier qu'il n'y a pas une tache avec le même nom.
+        {
+      throw Exception(S.current.TaskErrorNameAlreadyUsed);
+      return false;
+    }
+    if(pTask.deadline.isBefore(DateTime.now()))//La deadline est dans le futur.
+        {
+      throw Exception(S.current.TaskErrorDeadlineAlreadyPassed);
+      return false;
+    }
+    return true;
+  }
+
+}
+
+
+/*CollectionReference<Person> collectionUsers = FirebaseFirestore
     .instance
     .collection("users").withConverter(
     fromFirestore: (snapshot, _) => Person.fromJson(snapshot.data()!),
@@ -15,7 +85,7 @@ CollectionReference<Person> collectionUsers = FirebaseFirestore
 
 CollectionReference<Task> repoOfCurrentUser = collectionUsers.doc(currentUser?.uid).collection("Tasks").withConverter(
     fromFirestore: (snapshot, _) => Task.fromJson(snapshot.data()!),
-    toFirestore: (Task, _)=> Task.toJson());
+    toFirestore: (Task, _)=> Task.toJson());*/
 
 Future<UserCredential> signInWithGoogle() async {
   // Trigger the authentication flow
@@ -30,83 +100,6 @@ Future<UserCredential> signInWithGoogle() async {
   // Once signed in, return the UserCredential
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
-void addUser(Person pPerson) {
-  //TODO Validation.
+/*void addUser(Person pPerson) {
   collectionUsers.add(pPerson);
-}
-Future<void> addTask(Task pTask) async {
-  try{
-    if(await _taskIsValid(pTask))
-    {
-      //Ajouter la tache au repo de l'utilisateur connecté, si elle est valide.
-      repoOfCurrentUser.add(pTask);
-    }
-  }
-  catch(e){
-    //Rethrow pour pouvoir afficher le message dans l'app.
-    rethrow;
-  }
-}
-
-Future<void> editTask(QueryDocumentSnapshot<Task> pTask, int pValue, String pImageUrl) async {
-  try
-  {
-    //Fail forcément le 2e if. Peut-être changer plus tard.
-    //if(await _taskIsValid(pTask.data()))
-    {
-      DocumentReference<Task> taskDoc = repoOfCurrentUser.doc(pTask.id);
-      Task nouvelleTask = pTask.data(); //Créer une copie de la task à modifier.
-      nouvelleTask.percentageDone = pValue;//Change le % de complétion.
-      nouvelleTask.imageUrl = pImageUrl;
-      taskDoc.set(nouvelleTask);//Change la task sur firestore pour la copie modifiée.
-    }
-  }
-  catch(e){
-    //Rethrow pour pouvoir afficher le message dans l'app.
-    rethrow;
-  }
-}
-
-Future<bool> _taskIsValid (Task pTask)
-async {
-  if(pTask.name.trim() == "")//Le nom n'est pas vide.
-      {
-    throw Exception(S.current.TaskErrorNameEmpty);
-    return false;
-  }
-  QuerySnapshot<Task> taches = await repoOfCurrentUser.get();
-  if(taches.docs.where((t)=> t.data().name == pTask.name).isNotEmpty)//Vérifier qu'il n'y a pas une tache avec le même nom.
-      {
-    throw Exception(S.current.TaskErrorNameAlreadyUsed);
-    return false;
-  }
-  if(pTask.deadline.isBefore(DateTime.now()))//La deadline est dans le futur.
-      {
-    throw Exception(S.current.TaskErrorDeadlineAlreadyPassed);
-    return false;
-  }
-  return true;
-}
-
-int calculPourcentage(DateTime debut, DateTime fin){
-  Duration dureeTotal = fin.difference(debut);
-  Duration tempsEcoule = DateTime.now().difference(debut);
-  double pourcentage = 1;
-
-  if(dureeTotal.inSeconds != 0)
-  {
-    pourcentage = ((tempsEcoule.inSeconds / dureeTotal.inSeconds) * 100);
-  }
-
-  return pourcentage.round();
-}
-Future<void> testveirifuser(Person pUser)
-async {
-  QuerySnapshot<Person> users = await collectionUsers.get();
-  //Si parmis les utilisateurs avec le même nom il y a un utilisateur avec le même mot de passe, on connecte.
-  //Un peu funky d'avoir 2 where.
-  if(users.docs.where((p)=> p.data().name == pUser.name).where((p)=>p.data().password == pUser.password).isNotEmpty)
-      {
-    //TODO connecter l'utilisateur.
-  }
-}
+}*/

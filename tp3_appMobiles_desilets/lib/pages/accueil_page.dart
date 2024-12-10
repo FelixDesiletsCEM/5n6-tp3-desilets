@@ -20,15 +20,15 @@ class _AccueilPageState extends State<AccueilPage> {
 
   void getList() async
   {
-  QuerySnapshot<Task> taches = await repoOfCurrentUser.get();
-  listeTaches = taches.docs;
+    QuerySnapshot<Task> taches = await FirestoreService.getUserTasks().get();
+    listeTaches = taches.docs;
     print(listeTaches.toString());
     setState(() {});
   }
 
   @override
   void initState() {
-    firebase_auth.FirebaseAuth.instance
+    /*firebase_auth.FirebaseAuth.instance
         .authStateChanges()
         .listen((firebase_auth.User? user) {
       if (user == null) {
@@ -36,7 +36,7 @@ class _AccueilPageState extends State<AccueilPage> {
       } else {
         print('User is signed in! ' + user.email!);
       }
-    });
+    });*/
 
     super.initState();
     getList();
@@ -59,18 +59,23 @@ class _AccueilPageState extends State<AccueilPage> {
               (listeTaches!=null)?
                   //NOTE: Vu que le taskDoc n'est pas dynamique, si il y a un item dans firebase
                   //qui n'est pas convertissable en Task, l'app crash.
-              listeTaches.map<Widget>( (QueryDocumentSnapshot<Task> taskDoc) => ListTile(
-                onTap: (){Navigator.push(//Quand on appuis, redirige vers les détails de la task.
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ConsultationPage(task: taskDoc),
-                  ),
-                );},
-                leading: Image.network(taskDoc.data().imageUrl),//TODO remplacer par une image.
-                  title: Text(taskDoc.data().name),
-                  subtitle: Text("Deadline: " + taskDoc.data().deadline.toIso8601String() + " (${calculPourcentage(taskDoc.data().creationDate, taskDoc.data().deadline).toString()}%)"),
-                  trailing: Text(taskDoc.data().percentageDone.toString() + "% done")
-                )).toList()
+              listeTaches.map<Widget>( (QueryDocumentSnapshot<Task> taskDoc)  {
+
+                Task task = taskDoc.data();
+
+                return ListTile(
+                    onTap: (){Navigator.push(//Quand on appuis, redirige vers les détails de la task.
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ConsultationPage(task: taskDoc),
+                      ),
+                    );},
+                    leading: Image.network(taskDoc.data().imageUrl),
+                    title: Text(taskDoc.data().name),
+                    subtitle: Text("Deadline: " + taskDoc.data().deadline.toIso8601String() + " (${task.percentageTimeSpent.toString()}%)"),
+                    trailing: Text(taskDoc.data().percentageDone.toString() + "% done")
+                );
+              }).toList()
                   :[ListTile(title: Text(S.of(context).pageAccueilLoading))].toList(),
             ))
           ],

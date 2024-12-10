@@ -56,17 +56,14 @@ class _CreationPage extends State<CreationPage> {
             ),
             OutlinedButton(
                 onPressed: loading? null: () async {
-                  //TODO LES IDS SONT PAS PK!
-                  //Fix: add l'item avant puis le set après.
                   loading = true;
                   try{
                     Task task = Task(
                         tasknameTextController.text,
                         0,
-                        0,
                         DateTime.now(),
                         deadline);
-                    await addTask(task);
+                    await FirestoreService.addTask(task);
                     //Redirige vers l'accueil si la création réussi.
                     Navigator.push(
                       context,
