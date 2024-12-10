@@ -57,6 +57,7 @@ class _CreationPage extends State<CreationPage> {
             OutlinedButton(
                 onPressed: loading? null: () async {
                   //TODO LES IDS SONT PAS PK!
+                  //Fix: add l'item avant puis le set après.
                   loading = true;
                   try{
                     Task task = Task(

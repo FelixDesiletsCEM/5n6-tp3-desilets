@@ -80,6 +80,16 @@ class S {
     );
   }
 
+  /// `Sign in with google`
+  String get pageConnexionConnexionGoogle {
+    return Intl.message(
+      'Sign in with google',
+      name: 'pageConnexionConnexionGoogle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Sign in`
   String get pageConnexionConnexion {
     return Intl.message(

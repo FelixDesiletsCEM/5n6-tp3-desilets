@@ -41,6 +41,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "pageAccueilTitre": MessageLookupByLibrary.simpleMessage("Accueil"),
         "pageConnexionConnexion":
             MessageLookupByLibrary.simpleMessage("Se connecter"),
+        "pageConnexionConnexionGoogle":
+            MessageLookupByLibrary.simpleMessage("Sign in with google"),
         "pageConnexionInscription":
             MessageLookupByLibrary.simpleMessage("S\'inscrire"),
         "pageConnexionMotDePasse":

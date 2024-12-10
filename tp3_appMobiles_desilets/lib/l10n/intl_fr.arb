@@ -3,6 +3,7 @@
   "pageAccueilTitre": "Accueil",
   "pageAccueilLoading": "Chargement",
 
+  "pageConnexionConnexionGoogle": "Sign in with google",
   "pageConnexionConnexion": "Se connecter",
   "pageConnexionInscription": "S'inscrire",
   "pageConnexionMotDePasse": "Mot de passe",

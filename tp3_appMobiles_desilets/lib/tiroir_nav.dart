@@ -4,6 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tp3_appmobiles_desilets/pages/accueil_page.dart';
 import 'package:tp3_appmobiles_desilets/pages/connexion_page.dart';
 import 'package:tp3_appmobiles_desilets/pages/creation_page.dart';
+
+import 'generated/l10n.dart';
 class LeTiroir extends StatefulWidget {
   const LeTiroir({super.key});
 
@@ -26,7 +28,7 @@ class LeTiroirState extends State<LeTiroir> {
         ListTile(//Déconnexion de l'utilisateur
           dense: true,
           leading: const Icon(Icons.ac_unit),
-          title: Text("Déconnexion"),
+          title: Text(S.of(context).tiroirDeconnexion),
           onTap: () async{
             //TODO Marche juste avec google signin?
             await GoogleSignIn().signOut();
@@ -46,7 +48,7 @@ class LeTiroirState extends State<LeTiroir> {
         ListTile(//Redirige vers Accueil
           dense: true,
           leading: const Icon(Icons.ac_unit),
-          title: Text("Accueil"),
+          title: Text(S.of(context).pageAccueilTitre),
           onTap: () {
             Navigator.of(context).pop();
             Navigator.push(
@@ -61,7 +63,7 @@ class LeTiroirState extends State<LeTiroir> {
         ListTile(//Redirige vers Creation
           dense: true,
           leading: const Icon(Icons.ac_unit),
-          title: Text("Creation"),
+          title: Text(S.of(context).pageCreationTitre),
           onTap: () {
             Navigator.of(context).pop();
             Navigator.push(

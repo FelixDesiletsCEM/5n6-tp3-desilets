@@ -1,26 +1,71 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tp3_appmobiles_desilets/service.dart';
 import 'package:tp3_appmobiles_desilets/tiroir_nav.dart';
 import 'package:flutter/material.dart';
-import 'package:tp3_appmobiles_desilets/Model/transfert.dart';
+import 'package:tp3_appmobiles_desilets/Model/transfert.dart' as tache;
 import '../generated/l10n.dart';
 import 'accueil_page.dart';
 
 class ConsultationPage extends StatefulWidget {
   const ConsultationPage({super.key, required this.task});
 
-  final QueryDocumentSnapshot<Task> task;
+  final QueryDocumentSnapshot<tache.Task> task;
   @override
   State<ConsultationPage> createState() => _ConsultationPage();
 }
 
-
-
 class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObserver {
   final pourcentageTextController = TextEditingController();
-  //final picker = ImagePicker();
-  bool loading = false;
+  bool isLoading = false;
+  final picker = ImagePicker();
+  var _imageFile;
+  var _publicUrl;
 
+   sendPicture(XFile xfile) async {
+    final supabase = Supabase.instance.client;
+
+    String bucketid = "supabucket";
+    try {
+      await supabase
+          .storage
+          .createBucket(bucketid, BucketOptions(public: true));
+    } on StorageException catch(e) {
+      if(e.error == "Duplicate") {
+        // Le bucket existe déjà
+        print(e);
+      }
+    }
+    final String fullPath = await supabase
+        .storage
+        .from(bucketid)
+        .upload(
+      //TODO Mettre un nom unique
+        xfile.name,
+        File(xfile.path)
+    );
+    print(fullPath);
+    _publicUrl = supabase
+        .storage
+        .from(bucketid)
+        .getPublicUrl(xfile.name);
+  }
+
+  Future getImage() async {
+    print("ouverture du selecteur d'image");
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      print("l'image a ete choisie ${pickedFile.path}");
+      _imageFile = File(pickedFile.path);
+      setState(() {});
+
+      await sendPicture(pickedFile);
+      setState(() { });
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -54,16 +99,14 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            /*Expanded(child: CachedNetworkImage(
-              imageUrl: "http://10.0.2.2:8080/file/${widget.task.}" ,
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            )),*/
+            //TODO Marche pas, il faut remplacer par l'url de l'image.
+            Expanded(child: Image.network(_publicUrl??Supabase.instance.client.storage.from("supabucket").getPublicUrl("testchien.jpg"))),
             Expanded(child:
-            OutlinedButton(onPressed: loading? null: ()async {
-              loading = true;
-              //TODO Charger l'image
-              loading = false;}, child: Text(S.of(context).pageConsultationChangerImage)),
+            OutlinedButton(onPressed: isLoading? null: ()async {
+              //loading = true;
+              //TODO Changer image
+              await getImage();
+              isLoading = false;}, child: Text(S.of(context).pageConsultationChangerImage)),
             ),
             Expanded(child:
             Text("${S.of(context).pageConsultationNomTache} ${widget.task.data().name}"),
@@ -81,8 +124,8 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
             ),
             ),
             Expanded(child:
-            OutlinedButton(onPressed: loading? null: ()async{
-              loading = true;
+            OutlinedButton(onPressed: isLoading? null: ()async{
+              isLoading = true;
               try
               {
                 //Note: editTask ne prend pas une task mais un QueryDocumentSnapshot<Task>.
@@ -93,7 +136,7 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(e.toString())));
               }
-              loading = false;
+              isLoading = false;
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -103,7 +146,7 @@ class _ConsultationPage extends State<ConsultationPage> with WidgetsBindingObser
             }, child: Text(S.of(context).pageConsultationModifier)),
             ),
             Expanded(child:
-            OutlinedButton(onPressed: loading? null: (){
+            OutlinedButton(onPressed: isLoading? null: (){
             repoOfCurrentUser.doc(widget.task.id).delete();
             Navigator.push(
               context,

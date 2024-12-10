@@ -30,7 +30,9 @@ Future<UserCredential> signInWithGoogle() async {
   // Once signed in, return the UserCredential
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
-void addUser() {
+void addUser(Person pPerson) {
+  //TODO Validation.
+  collectionUsers.add(pPerson);
 }
 Future<void> addTask(Task pTask) async {
   try{
@@ -96,4 +98,14 @@ int calculPourcentage(DateTime debut, DateTime fin){
   }
 
   return pourcentage.round();
+}
+Future<void> testveirifuser(Person pUser)
+async {
+  QuerySnapshot<Person> users = await collectionUsers.get();
+  //Si parmis les utilisateurs avec le même nom il y a un utilisateur avec le même mot de passe, on connecte.
+  //Un peu funky d'avoir 2 where.
+  if(users.docs.where((p)=> p.data().name == pUser.name).where((p)=>p.data().password == pUser.password).isNotEmpty)
+      {
+    //TODO connecter l'utilisateur.
+  }
 }

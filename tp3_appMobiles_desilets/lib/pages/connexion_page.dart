@@ -1,13 +1,15 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tp3_appmobiles_desilets/pages/inscription_page.dart';
 import '../Model/transfert.dart';
 import '../generated/l10n.dart';
 import '../service.dart';
 import '../tiroir_nav.dart';
 import 'accueil_page.dart';
-
+import 'package:image_picker/image_picker.dart';
 class ConnexionPage extends StatefulWidget {
   const ConnexionPage({super.key});
 
@@ -18,6 +20,7 @@ class ConnexionPage extends StatefulWidget {
 class _ConnexionPageState extends State<ConnexionPage> {
   TextEditingController UsernameController = new TextEditingController();
   TextEditingController PasswordController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +28,7 @@ class _ConnexionPageState extends State<ConnexionPage> {
       drawer: LeTiroir(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Connexion"),
+        title: Text(S.of(context).pageConnexionTitre),
       ),
       body: Center(
         child: Column(
@@ -51,7 +54,7 @@ class _ConnexionPageState extends State<ConnexionPage> {
               catch(e){
                 print(e);
               }
-            }, child: Text("Connexion")),
+            }, child: Text(S.of(context).pageConnexionConnexion)),
 
             OutlinedButton(onPressed: ()async{
               try
@@ -85,7 +88,7 @@ class _ConnexionPageState extends State<ConnexionPage> {
                 print(e);
               }
             },
-                child: Text("Connexion avec Google")),
+                child: Text(S.of(context).pageConnexionConnexionGoogle)),
 
             OutlinedButton(onPressed: (){
               Navigator.push(
@@ -94,7 +97,7 @@ class _ConnexionPageState extends State<ConnexionPage> {
                   builder: (context) => InscriptionPage(),
                 ),
               );
-            }, child: Text("Inscription")),
+            }, child: Text(S.of(context).pageInscriptionTitre)),
 
           ],
         ),

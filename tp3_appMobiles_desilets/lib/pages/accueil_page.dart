@@ -43,10 +43,10 @@ class _AccueilPageState extends State<AccueilPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: LeTiroir(),
+      drawer: const LeTiroir(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Accueil"),
+        title: Text(S.of(context).pageAccueilTitre),
       ),
       body: Center(
         child: Column(
